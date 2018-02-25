@@ -3,12 +3,13 @@
 
 #include <err.h>    // err
 #include <getopt.h> // getopt_long
-#include <limits.h> // UINT_MAX
 #include <stdio.h>  // printf
 #include <stdlib.h> // exit
 #include <time.h>   // nanosleep
 
 #include <rfsgpio.h>
+
+#include "parsenum.h"
 
 #define OPTSTRING   "g:hv"
 #define PROGNAME    "ledblink"
@@ -45,34 +46,6 @@ print_version()
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
     );
     exit(0);
-}
-
-/* Function that parses some digits and creates a number.
-   It doesn't accept minus sign or other funcy stuff.
-
-   Parameters:
-     * s: string with the text.
-     * eptr: at exit, points to the next character to the last digit.
-     * i: at exit, contains the result.
-*/
-int parse_number(const char *s, const char **eptr, unsigned int *i) {
-    const char *ptr = s;
-    unsigned long long int t = 0;
-
-    // Add the numbers to the total while there's numbers in the string
-    while (*ptr >= '0' && *ptr <= '9') {
-        t = t * 10 + (*ptr - '0');
-        // Check that the result fits in an unsigned int
-        if (t > UINT_MAX) {
-            *i = 0;
-            return -1;
-        }
-        ptr++;
-    }
-    // Return the next character to the last digit and the result
-    *eptr = ptr;
-    *i = t;
-    return 0;
 }
 
 /* Parse the command line arguments.
@@ -130,9 +103,6 @@ parse_args(int argc, char **argv)
     }
     if (*endptr != '\0') {
         errx(1, "invalid GPIO pin number");
-    }
-    if (lgpio > (1 << sizeof(gpio_pin_t)*8) - 1) {
-        errx(1, "GPIO pin value out of range");
     }
     gpio = lgpio;
 }
@@ -213,7 +183,6 @@ int
 main(int argc, char **argv)
 {
     parse_args(argc, argv);
-    printf("GPIO: %d\n", gpio);
     check_blink_sequence();
     do_sequence();
     return 0;
