@@ -1,4 +1,27 @@
 
+/* buttonsd.c
+   Daemon that listents to events (clicks) in a bunch of GPIO buttons and
+   launches some actions.
+   
+   Copyright 2018 Antonio Serrano Hernandez
+
+   This file is part of rfsutils.
+
+   rfsutils is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   rfsutils is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with rfsutils; see the file COPYING.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
 #include "config.h"
 
 #include <err.h>        // err
